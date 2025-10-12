@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imaginary Animal Movement Trace</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <style>
+        /* Simple styling to make it look good */
+        body { margin: 0; font-family: sans-serif; background-color: #1F2937; color: #E5E7EB; }
+        #animalMap { height: 100vh; width: 100vw; } /* Fullscreen map */
+        .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+            background: #2F374A;
+            color: #E5E7EB;
+            border-radius: 8px;
+        }
+        .info-panel {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            background: rgba(47, 55, 74, 0.9);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #374151;
+        }
+        .info-panel h1 { margin: 0 0 10px 0; color: #10B981; }
+        .info-panel p { margin: 5px 0; }
+    </style>
+</head>
+<body>
+
+    <div id="animalMap"></div>
+
+    <div class="info-panel">
+        <h1>Animal Movement Trace</h1>
+        <p><span style="background-color: #10B981; display: inline-block; width: 20px; height: 10px; margin-right: 5px;"></span> Deer Pack</p>
+        <p><span style="background-color: #3498db; display: inline-block; width: 20px; height: 10px; margin-right: 5px;"></span> Elephant Herd</p>
+    </div>
+
+    <script>
+        // --- 1. IMAGINARY DATA (Replaces the CSV and Backend) ---
+        const imaginaryAnimalData = {
+            "paths": {
+                "deer_pack_1": [
+                    {"lat": 13.0, "lon": 77.5, "popup": "Deer Pack<br>10 Oct 2023 10:00 - Normal grazing"},
+                    {"lat": 13.02, "lon": 77.52, "popup": "Deer Pack<br>11 Oct 2023 11:00 - Moving north"},
+                    {"lat": 13.05, "lon": 77.53, "popup": "Deer Pack<br>12 Oct 2023 12:30 - Agitated movement"}
+                ],
+                "elephant_herd_1": [
+                    {"lat": 12.95, "lon": 77.6, "popup": "Elephant Herd<br>11 Oct 2023 08:00 - Near water"},
+                    {"lat": 12.94, "lon": 77.62, "popup": "Elephant Herd<br>12 Oct 2023 09:15 - Moving towards farmland"}
+                ],
+                "lone_tiger_1": [
+                    {"lat": 12.98, "lon": 77.55, "popup": "Lone Tiger<br>12 Oct 2023 14:00 - Single sighting"}
+                ]
+            }
+        };
+
+        // --- 2. MAP INITIALIZATION AND DRAWING LOGIC ---
+        let map = null;
+        let mapLayers = [];
+
+        function initializeMap() {
+            // Create the map object
+            map = L.map('animalMap');
+
+            // Add the dark-themed map tiles
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap &copy; CartoDB'
+            }).addTo(map);
+
+            // Draw the animal paths using our imaginary data
+            drawAnimalPaths(imaginaryAnimalData.paths);
+        }
+
+        function drawAnimalPaths(paths) {
+            // Clear any old drawings
+            mapLayers.forEach(layer => map.removeLayer(layer));
+            mapLayers = [];
+            
+            const allCoordinates = []; // Used to auto-zoom the map
+            const colors = ['#10B981', '#3498db', '#f1c40f']; // Green, Blue, Yellow
+            let colorIndex = 0;
+
+            // Loop through each animal group
+            for (const groupId in paths) {
+                const pathPoints = paths[groupId];
+                if (pathPoints.length === 0) continue;
+
+                const coordinates = pathPoints.map(p => {
+                    const coord = [p.lat, p.lon];
+                    allCoordinates.push(coord);
+                    return coord;
+                });
+                
+                const color = colors[colorIndex % colors.length];
+
+                // Draw the colored line (the trace)
+                if (coordinates.length > 1) {
+                    const polyline = L.polyline(coordinates, { color: color, weight: 4, opacity: 0.8 }).addTo(map);
+                    mapLayers.push(polyline);
+                }
+                
+                // Add a marker for the MOST RECENT location
+                const lastPoint = pathPoints[pathPoints.length - 1];
+                const marker = L.marker([lastPoint.lat, lastPoint.lon]).addTo(map)
+                    .bindPopup(lastPoint.popup);
+                mapLayers.push(marker);
+
+                colorIndex++;
+            }
+
+            // Auto-zoom the map to fit all the paths
+            if (allCoordinates.length > 0) {
+                map.fitBounds(allCoordinates, { padding: [50, 50] });
+            }
+        }
+        
+        // --- 3. RUN THE CODE ---
+        // Run the initializeMap function once the page has finished loading
+        document.addEventListener('DOMContentLoaded', initializeMap);
+    </script>
+</body>
+</html>

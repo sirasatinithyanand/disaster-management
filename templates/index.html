@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisasterWatch - Animal Monitoring Dashboard</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #334155;
+            --border-color: #475569;
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        
+        .card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+        }
+        
+        .metric-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 8px;
+        }
+        
+        .btn {
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.4);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--border-color);
+        }
+        
+        .time-filter {
+            display: flex;
+            gap: 8px;
+            background: var(--bg-card);
+            padding: 4px;
+            border-radius: 10px;
+        }
+        
+        .time-filter button {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .time-filter button.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        #animalMap {
+            height: 500px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+        
+        .leaflet-popup-content-wrapper {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 12px;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .leaflet-popup-content {
+            margin: 8px;
+        }
+        
+        .leaflet-popup-tip {
+            background: var(--bg-secondary);
+        }
+        
+        .event-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+        
+        .event-item:hover {
+            background: var(--border-color);
+            transform: translateX(4px);
+        }
+        
+        .event-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        
+        .event-icon.earthquake { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .event-icon.tsunami { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); }
+        .event-icon.wildfire { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); }
+        .event-icon.flood { background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-left: 8px;
+        }
+        
+        .status-active { background: var(--primary); box-shadow: 0 0 8px var(--primary); }
+        .status-warning { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
+        
+        .chart-container {
+            position: relative;
+            height: 250px;
+            margin-top: 20px;
+        }
+        
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+        
+        .spinner {
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="max-w-7xl mx-auto p-6">
+        <!-- Header -->
+        <header class="mb-8">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold mb-2">🌍 DisasterWatch Dashboard</h1>
+                    <p class="text-text-secondary">Real-time animal behavior monitoring and disaster tracking</p>
+                </div>
+                <div class="time-filter">
+                    <button class="active" data-range="30">30D</button>
+                    <button data-range="90">90D</button>
+                    <button data-range="365">365D</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+            <!-- Animal Locations Map -->
+            <div class="lg:col-span-2">
+                <div class="card">
+                    <div class="section-title">
+                        <span>📍</span> Animal Locations
+                    </div>
+                    <div id="animalMap"></div>
+                    <button class="btn mt-4" onclick="refreshAnimalData()">
+                        <span>↻</span> Refresh Animal Data
+                    </button>
+                </div>
+            </div>
+
+            <!-- Anomaly Score -->
+            <div>
+                <div class="card h-full">
+                    <div class="section-title">
+                        <span>📈</span> Anomaly Score
+                    </div>
+                    <div class="metric-value" id="anomalyValue">+12%</div>
+                    <div class="metric-label">Last 30 Days</div>
+                    <div class="chart-container">
+                        <canvas id="anomalyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metrics & Event History -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Behaviour Reports -->
+            <div class="lg:col-span-2">
+                <div class="card">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="section-title mb-0">
+                            <span>📊</span> Behaviour Reports
+                        </div>
+                        <button class="btn-secondary btn" onclick="refreshBehaviourData()">
+                            <span>↻</span> Refresh
+                        </button>
+                    </div>
+                    <div class="metric-value" id="behaviourValue">8</div>
+                    <div class="metric-label" id="behaviourLabel">Last 7 Days (+5%)</div>
+                    <div class="chart-container">
+                        <canvas id="behaviourChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event History -->
+            <div>
+                <div class="card">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="section-title mb-0">
+                            <span>📋</span> Event History
+                        </div>
+                        <button class="btn-secondary btn text-sm" onclick="loadDisasters()">
+                            Load More
+                        </button>
+                    </div>
+                    <div id="disasterList" class="space-y-3">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let map = null;
+        let mapLayers = [];
+        let anomalyChart = null;
+        let behaviourChart = null;
+
+        // Initialize Map
+        function initializeMap() {
+            if (map) return;
+            
+            map = L.map('animalMap').setView([12.91, 77.30], 13);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(map);
+            
+            loadAnimalLocations();
+        }
+
+        // Load Animal Locations
+        async function loadAnimalLocations() {
+            try {
+                const response = await fetch('/animal-locations');
+                const data = await response.json();
+                
+                if (data.success && data.paths) {
+                    drawAnimalPaths(data.paths);
+                }
+            } catch (error) {
+                console.error('Error loading animal locations:', error);
+            }
+        }
+
+        // Draw Animal Paths on Map
+        function drawAnimalPaths(paths) {
+            // Clear existing layers
+            mapLayers.forEach(layer => map.removeLayer(layer));
+            mapLayers = [];
+            
+            const colors = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
+            let colorIndex = 0;
+            const allCoords = [];
+            
+            for (const groupId in paths) {
+                const pathPoints = paths[groupId];
+                if (pathPoints.length === 0) continue;
+                
+                const color = colors[colorIndex++ % colors.length];
+                const coords = pathPoints.map(p => {
+                    const coord = [p.lat, p.lon];
+                    allCoords.push(coord);
+                    return coord;
+                });
+                
+                // Draw polyline
+                if (coords.length > 1) {
+                    const polyline = L.polyline(coords, {
+                        color: color,
+                        weight: 3,
+                        opacity: 0.7
+                    }).addTo(map);
+                    mapLayers.push(polyline);
+                }
+                
+                // Add markers
+                pathPoints.forEach((point, idx) => {
+                    const isLast = idx === pathPoints.length - 1;
+                    const marker = L.circleMarker([point.lat, point.lon], {
+                        radius: isLast ? 8 : 5,
+                        fillColor: color,
+                        color: '#fff',
+                        weight: 2,
+                        opacity: 1,
+                        fillOpacity: isLast ? 1 : 0.6
+                    }).addTo(map);
+                    
+                    marker.bindPopup(`
+                        <div style="min-width: 200px;">
+                            <strong style="color: ${color}; font-size: 16px;">${point.animal_type}</strong><br>
+                            <span style="color: #94a3b8;">📅 ${point.timestamp}</span><br>
+                            <span style="color: #94a3b8;">📝 ${point.behaviour}</span><br>
+                            <span style="color: #94a3b8;">⚠️ Anomaly: ${point.anomaly_score}%</span>
+                        </div>
+                    `);
+                    
+                    mapLayers.push(marker);
+                });
+            }
+            
+            // Fit bounds to show all markers
+            if (allCoords.length > 0) {
+                map.fitBounds(allCoords, { padding: [50, 50], maxZoom: 14 });
+            }
+        }
+
+        // Load Anomaly Chart Data
+        async function loadAnomalyChart() {
+            try {
+                const response = await fetch('/anomaly-chart-data');
+                const data = await response.json();
+                
+                document.getElementById('anomalyValue').textContent = `+${data.average}%`;
+                
+                drawAnomalyChart(data.labels, data.data);
+            } catch (error) {
+                console.error('Error loading anomaly chart:', error);
+            }
+        }
+
+        // Draw Anomaly Chart
+        function drawAnomalyChart(labels, data) {
+            const canvas = document.getElementById('anomalyChart');
+            if (!canvas) return;
+            
+            if (anomalyChart) anomalyChart.destroy();
+            
+            const ctx = canvas.getContext('2d');
+            const gradient = ctx.createLinearGradient(0, 0, 0, 250);
+            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.4)');
+            gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
+            
+            anomalyChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        borderColor: '#10b981',
+                        backgroundColor: gradient,
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#10b981',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#1e293b',
+                            titleColor: '#f1f5f9',
+                            bodyColor: '#94a3b8',
+                            borderColor: '#475569',
+                            borderWidth: 1,
+                            padding: 12,
+                            displayColors: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: '#334155', drawBorder: false },
+                            ticks: { color: '#94a3b8', font: { size: 11 } }
+                        },
+                        y: {
+                            grid: { color: '#334155', drawBorder: false },
+                            ticks: { color: '#94a3b8', font: { size: 11 } },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load Behaviour Chart Data
+        async function loadBehaviourChart() {
+            try {
+                const response = await fetch('/behaviour-chart-data');
+                const data = await response.json();
+                
+                document.getElementById('behaviourValue').textContent = data.total;
+                
+                drawBehaviourChart(data.labels, data.data);
+            } catch (error) {
+                console.error('Error loading behaviour chart:', error);
+            }
+        }
+
+        // Draw Behaviour Chart
+        function drawBehaviourChart(labels, data) {
+            const canvas = document.getElementById('behaviourChart');
+            if (!canvas) return;
+            
+            if (behaviourChart) behaviourChart.destroy();
+            
+            behaviourChart = new Chart(canvas, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: '#10b981',
+                        borderRadius: 8,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#1e293b',
+                            titleColor: '#f1f5f9',
+                            bodyColor: '#94a3b8',
+                            borderColor: '#475569',
+                            borderWidth: 1,
+                            padding: 12,
+                            displayColors: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#94a3b8', font: { size: 11 } }
+                        },
+                        y: {
+                            grid: { color: '#334155', drawBorder: false },
+                            ticks: { color: '#94a3b8', font: { size: 11 }, stepSize: 1 },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load Disasters
+        async function loadDisasters() {
+            try {
+                const response = await fetch('/natural-disasters');
+                const data = await response.json();
+                
+                const listEl = document.getElementById('disasterList');
+                
+                if (data.success && data.disasters.length > 0) {
+                    listEl.innerHTML = data.disasters.map(d => `
+                        <div class="event-item">
+                            <div class="event-icon ${d.type.toLowerCase().replace(' ', '')}">
+                                ${getDisasterEmoji(d.type)}
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-semibold">${d.type} - ${d.region}</div>
+                                <div class="text-sm text-text-secondary">Date: ${d.date}</div>
+                            </div>
+                            <span class="status-dot status-active"></span>
+                        </div>
+                    `).join('');
+                } else {
+                    listEl.innerHTML = '<p class="text-text-secondary text-center">No events found</p>';
+                }
+            } catch (error) {
+                console.error('Error loading disasters:', error);
+                document.getElementById('disasterList').innerHTML = 
+                    '<p class="text-red-400 text-center">Error loading data</p>';
+            }
+        }
+
+        // Get Disaster Emoji
+        function getDisasterEmoji(type) {
+            const emojis = {
+                'Earthquake': '⚡',
+                'Tsunami': '🌊',
+                'Wildfire': '🔥',
+                'Flood': '💧'
+            };
+            return emojis[type] || '⚠️';
+        }
+
+        // Refresh Functions
+        function refreshAnimalData() {
+            loadAnimalLocations();
+        }
+
+        function refreshBehaviourData() {
+            loadBehaviourChart();
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeMap();
+            loadAnomalyChart();
+            loadBehaviourChart();
+            loadDisasters();
+        });
+    </script>
+</body>
+</html>

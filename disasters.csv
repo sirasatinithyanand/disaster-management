@@ -1,0 +1,6 @@
+disaster_type,region,date,icon
+Earthquake,Region A,12 Sep 2025,zap
+Tsunami Warning,Region B,28 Aug 2025,wind
+Wildfire,Region C,13 Aug 2025,cloud-lightning
+Flooding,Region D,29 Jul 2025,umbrella
+Landslide,Region E,14 Jul 2025,alert-triangle

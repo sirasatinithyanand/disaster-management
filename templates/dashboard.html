@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisasterWatch - Savandurga Area Tracker</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #111827;
+            --sidebar-bg: #1F2937;
+            --card-bg: #374151;
+            --border-color: #4B5563;
+            --primary-color: #38bdf8; /* A nice Sky Blue */
+            --text-primary: #F9FAFB;
+            --text-secondary: #9CA3AF;
+            --font-family: 'Inter', sans-serif;
+        }
+        body, html { margin: 0; padding: 0; height: 100%; width: 100%; font-family: var(--font-family); background-color: var(--bg-dark); color: var(--text-primary); overflow: hidden; }
+        .dashboard-container { display: flex; height: 100vh; }
+        .sidebar { width: 320px; background-color: var(--sidebar-bg); padding: 24px; display: flex; flex-direction: column; border-right: 1px solid var(--border-color); box-shadow: 2px 0 10px rgba(0,0,0,0.2); z-index: 10; }
+        .main-content { flex-grow: 1; }
+        #animalMap { height: 100%; width: 100%; background-color: #2c3e50; }
+        .sidebar-header { display: flex; align-items: center; gap: 12px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); }
+        .sidebar-header h1 { font-size: 1.5rem; font-weight: 700; margin: 0; color: var(--primary-color); }
+        .legend { margin-top: 24px; }
+        .legend h2 { font-size: 1.1rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px; }
+        .legend-list { list-style: none; padding: 0; margin: 0; }
+        .legend-item { display: flex; align-items: center; padding: 12px; border-radius: 8px; cursor: pointer; transition: background-color 0.2s ease-in-out; }
+        .legend-item:hover { background-color: var(--card-bg); }
+        .legend-item .color-swatch { width: 16px; height: 16px; border-radius: 4px; margin-right: 12px; flex-shrink: 0; }
+        .legend-item .group-name { font-weight: 500; }
+        .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: var(--sidebar-bg); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        .leaflet-popup-content { font-size: 0.9rem; line-height: 1.5; }
+        .leaflet-popup-content b { color: var(--primary-color); }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <i data-feather="map-pin"></i>
+                <h1>Rural Tracker</h1>
+            </div>
+            <div class="legend">
+                <h2>Savandurga Area</h2>
+                <ul class="legend-list" id="legend-list">
+                    </ul>
+            </div>
+        </div>
+        <div class="main-content">
+            <div id="animalMap"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. NEW IMAGINARY DATA - Village & Forest setting near Manchanabele ---
+        const imaginaryAnimalData = {
+            "paths": {
+                "cow_herd_1": [
+                    {"lat": 12.915, "lon": 77.295, "popup": "<b>Cow Herd</b><br>10 Oct - Grazing in pasture"},
+                    {"lat": 12.918, "lon": 77.300, "popup": "<b>Cow Herd</b><br>11 Oct - Near Manchanabele Reservoir"},
+                    {"lat": 12.916, "lon": 77.305, "popup": "<b>Cow Herd</b><br>12 Oct - Returning to village"}
+                ],
+                "sheep_flock_1": [
+                    {"lat": 12.925, "lon": 77.310, "popup": "<b>Sheep Flock</b><br>11 Oct - On open ground"},
+                    {"lat": 12.922, "lon": 77.315, "popup": "<b>Sheep Flock</b><br>12 Oct - Huddled together, agitated"}
+                ],
+                "deer_1": [
+                    {"lat": 12.905, "lon": 77.280, "popup": "<b>Deer</b><br>12 Oct - Sighting at Savandurga forest edge"}
+                ],
+                "dog_1": [
+                    {"lat": 12.910, "lon": 77.308, "popup": "<b>Dog</b><br>11 Oct - Roaming near village"},
+                    {"lat": 12.912, "lon": 77.312, "popup": "<b>Dog</b><br>12 Oct - Barking towards the hills"}
+                ]
+            }
+        };
+
+        // --- 2. MAP LOGIC ---
+        let map = null;
+        let mapLayers = {};
+
+        function initializeMap() {
+            // Center the map on the new village location
+            map = L.map('animalMap', { zoomControl: false }).setView([12.91, 77.30], 14); // Zoomed in closer
+            L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+            // Using the professional Topographic Map style
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, and the GIS User Community'
+            }).addTo(map);
+
+            drawAnimalPaths(imaginaryAnimalData.paths);
+        }
+
+        function drawAnimalPaths(paths) {
+            Object.values(mapLayers).forEach(group => {
+                if(group.polyline) map.removeLayer(group.polyline);
+                if(group.marker) map.removeLayer(group.marker);
+            });
+            mapLayers = {};
+            const allCoordinates = [];
+            const legendList = document.getElementById('legend-list');
+            legendList.innerHTML = '';
+            const colors = ['#f59e0b', '#e11d48', '#22c55e', '#8b5cf6']; // Amber, Rose, Green, Violet
+            let colorIndex = 0;
+
+            for (const groupId in paths) {
+                const pathPoints = paths[groupId];
+                if (pathPoints.length === 0) continue;
+
+                const coordinates = pathPoints.map(p => {
+                    const coord = [p.lat, p.lon];
+                    allCoordinates.push(coord);
+                    return coord;
+                });
+                
+                const color = colors[colorIndex % colors.length];
+                let polyline = null;
+                if (coordinates.length > 1) {
+                    polyline = L.polyline(coordinates, { color: color, weight: 4, opacity: 0.9 }).addTo(map);
+                }
+                
+                const lastPoint = pathPoints[pathPoints.length - 1];
+                const marker = L.marker([lastPoint.lat, lastPoint.lon]).addTo(map).bindPopup(lastPoint.popup);
+                mapLayers[groupId] = { polyline, marker };
+                
+                const groupName = lastPoint.popup.split('<br>')[0].replace('<b>','').replace('</b>','');
+                const listItem = document.createElement('li');
+                listItem.className = 'legend-item';
+                listItem.innerHTML = `<div class="color-swatch" style="background-color: ${color};"></div><span class="group-name">${groupName}</span>`;
+                
+                listItem.addEventListener('click', () => {
+                    const bounds = polyline ? polyline.getBounds() : marker.getLatLng();
+                    const zoomLevel = polyline ? null : 15; // Zoom closer for single points
+                    if(zoomLevel) {
+                        map.setView(bounds, zoomLevel);
+                    } else {
+                        map.fitBounds(bounds, { padding: [50, 50] });
+                    }
+                    marker.openPopup();
+                });
+                
+                legendList.appendChild(listItem);
+                colorIndex++;
+            }
+
+            if (allCoordinates.length > 0) {
+                map.fitBounds(allCoordinates, { padding: [100, 100] }); // More padding
+            }
+        }
+        
+        // --- 3. RUN THE CODE ---
+        document.addEventListener('DOMContentLoaded', () => {
+            feather.replace({ width: '28px', height: '28px' });
+            initializeMap();
+        });
+    </script>
+</body>
+</html>
