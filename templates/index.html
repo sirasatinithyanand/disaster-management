@@ -3,48 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DisasterWatch - Animal Monitoring Dashboard</title>
+    <title>WildSense - Animal Monitoring Dashboard</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --bg-card: #334155;
-            --border-color: #475569;
-            --primary: #10b981;
-            --primary-dark: #059669;
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
+            --bg-primary: #f0f5f2;
+            --bg-card: #ffffff;
+            --border-color: #e2e8f0;
+            --primary: #3B7159;
+            --primary-dark: #2c5a45;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
             --text-muted: #64748b;
         }
         
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
         }
         
         .card {
-            background: var(--bg-secondary);
-            border-radius: 16px;
+            background: var(--bg-card);
+            border-radius: 12px;
             padding: 24px;
             border: 1px solid var(--border-color);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.10);
             transition: transform 0.2s, box-shadow 0.2s;
         }
         
         .card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 20px -3px rgba(0, 0, 0, 0.15);
         }
         
         .section-title {
@@ -87,16 +86,17 @@
         .btn:hover {
             background: var(--primary-dark);
             transform: translateY(-1px);
-            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 4px 6px -1px rgba(59, 113, 89, 0.4);
         }
         
         .btn-secondary {
             background: var(--bg-card);
             color: var(--text-primary);
+            border: 1px solid var(--border-color);
         }
         
         .btn-secondary:hover {
-            background: var(--border-color);
+            background: #f8fafc;
         }
         
         .time-filter {
@@ -105,6 +105,7 @@
             background: var(--bg-card);
             padding: 4px;
             border-radius: 10px;
+            border: 1px solid var(--border-color);
         }
         
         .time-filter button {
@@ -125,17 +126,17 @@
         
         #animalMap {
             height: 500px;
-            border-radius: 16px;
+            border-radius: 12px;
             border: 1px solid var(--border-color);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
         }
         
         .leaflet-popup-content-wrapper {
-            background: var(--bg-secondary);
+            background: var(--bg-card);
             color: var(--text-primary);
             border-radius: 12px;
             padding: 12px;
             border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         
         .leaflet-popup-content {
@@ -143,7 +144,7 @@
         }
         
         .leaflet-popup-tip {
-            background: var(--bg-secondary);
+            background: var(--bg-card);
         }
         
         .event-item {
@@ -151,15 +152,16 @@
             align-items: center;
             gap: 16px;
             padding: 16px;
-            background: var(--bg-card);
+            background: #f8fafc;
             border-radius: 12px;
             border: 1px solid var(--border-color);
             transition: all 0.2s;
         }
         
         .event-item:hover {
-            background: var(--border-color);
+            background: var(--bg-card);
             transform: translateX(4px);
+            border-color: #cbd5e1;
         }
         
         .event-icon {
@@ -171,6 +173,7 @@
             justify-content: center;
             font-size: 24px;
             flex-shrink: 0;
+            color: white;
         }
         
         .event-icon.earthquake { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
@@ -226,12 +229,11 @@
     </style>
 </head>
 <body>
-    <div class="max-w-7xl mx-auto p-6">
-        <!-- Header -->
+    <div class="max-w-screen-2xl mx-auto py-6 px-[70px]">
         <header class="mb-8">
             <div class="flex justify-between items-center">
                 <div>
-                    <h1 class="text-3xl font-bold mb-2">🌍 DisasterWatch Dashboard</h1>
+                    <h1 class="text-3xl font-bold mb-2">🌿 WildSense Dashboard</h1>
                     <p class="text-text-secondary">Real-time animal behavior monitoring and disaster tracking</p>
                 </div>
                 <div class="time-filter">
@@ -242,9 +244,7 @@
             </div>
         </header>
 
-        <!-- Main Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-            <!-- Animal Locations Map -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 mb-10">
             <div class="lg:col-span-2">
                 <div class="card">
                     <div class="section-title">
@@ -257,7 +257,6 @@
                 </div>
             </div>
 
-            <!-- Anomaly Score -->
             <div>
                 <div class="card h-full">
                     <div class="section-title">
@@ -272,9 +271,7 @@
             </div>
         </div>
 
-        <!-- Metrics & Event History -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Behaviour Reports -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
             <div class="lg:col-span-2">
                 <div class="card">
                     <div class="flex justify-between items-center mb-4">
@@ -293,7 +290,6 @@
                 </div>
             </div>
 
-            <!-- Event History -->
             <div>
                 <div class="card">
                     <div class="flex justify-between items-center mb-4">
@@ -337,8 +333,20 @@
         // Load Animal Locations
         async function loadAnimalLocations() {
             try {
-                const response = await fetch('/animal-locations');
-                const data = await response.json();
+                // MOCKUP: Replace with actual API call
+                const data = {
+                    success: true,
+                    paths: {
+                        group1: [
+                            { lat: 12.91, lon: 77.30, animal_type: "Elephant", timestamp: "2025-10-15 09:00", behaviour: "Normal Grazing", anomaly_score: 5 },
+                            { lat: 12.912, lon: 77.305, animal_type: "Elephant", timestamp: "2025-10-15 10:00", behaviour: "Accelerated Movement", anomaly_score: 15 }
+                        ],
+                        group2: [
+                            { lat: 12.90, lon: 77.29, animal_type: "Deer", timestamp: "2025-10-15 09:30", behaviour: "Erratic Running", anomaly_score: 25 },
+                            { lat: 12.905, lon: 77.295, animal_type: "Deer", timestamp: "2025-10-15 10:15", behaviour: "Huddling", anomaly_score: 30 }
+                        ]
+                    }
+                };
                 
                 if (data.success && data.paths) {
                     drawAnimalPaths(data.paths);
@@ -350,11 +358,10 @@
 
         // Draw Animal Paths on Map
         function drawAnimalPaths(paths) {
-            // Clear existing layers
             mapLayers.forEach(layer => map.removeLayer(layer));
             mapLayers = [];
             
-            const colors = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
+            const colors = ['#3B7159', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
             let colorIndex = 0;
             const allCoords = [];
             
@@ -369,17 +376,11 @@
                     return coord;
                 });
                 
-                // Draw polyline
                 if (coords.length > 1) {
-                    const polyline = L.polyline(coords, {
-                        color: color,
-                        weight: 3,
-                        opacity: 0.7
-                    }).addTo(map);
+                    const polyline = L.polyline(coords, { color: color, weight: 3, opacity: 0.7 }).addTo(map);
                     mapLayers.push(polyline);
                 }
                 
-                // Add markers
                 pathPoints.forEach((point, idx) => {
                     const isLast = idx === pathPoints.length - 1;
                     const marker = L.circleMarker([point.lat, point.lon], {
@@ -392,11 +393,11 @@
                     }).addTo(map);
                     
                     marker.bindPopup(`
-                        <div style="min-width: 200px;">
+                        <div style="min-width: 200px; font-family: 'Poppins', sans-serif;">
                             <strong style="color: ${color}; font-size: 16px;">${point.animal_type}</strong><br>
-                            <span style="color: #94a3b8;">📅 ${point.timestamp}</span><br>
-                            <span style="color: #94a3b8;">📝 ${point.behaviour}</span><br>
-                            <span style="color: #94a3b8;">⚠️ Anomaly: ${point.anomaly_score}%</span>
+                            <span style="color: var(--text-secondary);">📅 ${point.timestamp}</span><br>
+                            <span style="color: var(--text-secondary);">📝 ${point.behaviour}</span><br>
+                            <span style="color: var(--text-secondary);">⚠️ Anomaly: ${point.anomaly_score}%</span>
                         </div>
                     `);
                     
@@ -404,7 +405,6 @@
                 });
             }
             
-            // Fit bounds to show all markers
             if (allCoords.length > 0) {
                 map.fitBounds(allCoords, { padding: [50, 50], maxZoom: 14 });
             }
@@ -412,12 +412,15 @@
 
         // Load Anomaly Chart Data
         async function loadAnomalyChart() {
-            try {
-                const response = await fetch('/anomaly-chart-data');
-                const data = await response.json();
+             try {
+                // MOCKUP: Replace with actual API call
+                const data = {
+                    average: 12,
+                    labels: ["W1", "W2", "W3", "W4", "W5", "W6", "W7"],
+                    data: [5, 8, 10, 15, 12, 18, 12]
+                };
                 
                 document.getElementById('anomalyValue').textContent = `+${data.average}%`;
-                
                 drawAnomalyChart(data.labels, data.data);
             } catch (error) {
                 console.error('Error loading anomaly chart:', error);
@@ -428,13 +431,12 @@
         function drawAnomalyChart(labels, data) {
             const canvas = document.getElementById('anomalyChart');
             if (!canvas) return;
-            
             if (anomalyChart) anomalyChart.destroy();
             
             const ctx = canvas.getContext('2d');
             const gradient = ctx.createLinearGradient(0, 0, 0, 250);
-            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.4)');
-            gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
+            gradient.addColorStop(0, 'rgba(59, 113, 89, 0.4)');
+            gradient.addColorStop(1, 'rgba(59, 113, 89, 0.0)');
             
             anomalyChart = new Chart(ctx, {
                 type: 'line',
@@ -442,13 +444,13 @@
                     labels: labels,
                     datasets: [{
                         data: data,
-                        borderColor: '#10b981',
+                        borderColor: '#3B7159',
                         backgroundColor: gradient,
                         borderWidth: 3,
                         fill: true,
                         tension: 0.4,
                         pointRadius: 4,
-                        pointBackgroundColor: '#10b981',
+                        pointBackgroundColor: '#3B7159',
                         pointBorderColor: '#fff',
                         pointBorderWidth: 2,
                         pointHoverRadius: 6
@@ -460,23 +462,18 @@
                     plugins: {
                         legend: { display: false },
                         tooltip: {
-                            backgroundColor: '#1e293b',
-                            titleColor: '#f1f5f9',
-                            bodyColor: '#94a3b8',
-                            borderColor: '#475569',
-                            borderWidth: 1,
-                            padding: 12,
-                            displayColors: false
+                            backgroundColor: '#ffffff', titleColor: '#1e293b', bodyColor: '#475569',
+                            borderColor: '#e2e8f0', borderWidth: 1, padding: 12, displayColors: false
                         }
                     },
                     scales: {
                         x: {
-                            grid: { color: '#334155', drawBorder: false },
-                            ticks: { color: '#94a3b8', font: { size: 11 } }
+                            grid: { color: '#e2e8f0', drawBorder: false },
+                            ticks: { color: '#475569', font: { size: 11 } }
                         },
                         y: {
-                            grid: { color: '#334155', drawBorder: false },
-                            ticks: { color: '#94a3b8', font: { size: 11 } },
+                            grid: { color: '#e2e8f0', drawBorder: false },
+                            ticks: { color: '#475569', font: { size: 11 } },
                             beginAtZero: true
                         }
                     }
@@ -487,11 +484,13 @@
         // Load Behaviour Chart Data
         async function loadBehaviourChart() {
             try {
-                const response = await fetch('/behaviour-chart-data');
-                const data = await response.json();
-                
+                // MOCKUP: Replace with actual API call
+                const data = {
+                    total: 8,
+                    labels: ["Grazing", "Huddling", "Erratic", "Stampede", "Resting"],
+                    data: [5, 3, 8, 2, 6]
+                };
                 document.getElementById('behaviourValue').textContent = data.total;
-                
                 drawBehaviourChart(data.labels, data.data);
             } catch (error) {
                 console.error('Error loading behaviour chart:', error);
@@ -502,7 +501,6 @@
         function drawBehaviourChart(labels, data) {
             const canvas = document.getElementById('behaviourChart');
             if (!canvas) return;
-            
             if (behaviourChart) behaviourChart.destroy();
             
             behaviourChart = new Chart(canvas, {
@@ -511,9 +509,10 @@
                     labels: labels,
                     datasets: [{
                         data: data,
-                        backgroundColor: '#10b981',
-                        borderRadius: 8,
-                        borderSkipped: false
+                        backgroundColor: '#3B7159',
+                        borderRadius: 6,
+                        borderSkipped: false,
+                        barThickness: 20
                     }]
                 },
                 options: {
@@ -522,23 +521,18 @@
                     plugins: {
                         legend: { display: false },
                         tooltip: {
-                            backgroundColor: '#1e293b',
-                            titleColor: '#f1f5f9',
-                            bodyColor: '#94a3b8',
-                            borderColor: '#475569',
-                            borderWidth: 1,
-                            padding: 12,
-                            displayColors: false
+                            backgroundColor: '#ffffff', titleColor: '#1e293b', bodyColor: '#475569',
+                            borderColor: '#e2e8f0', borderWidth: 1, padding: 12, displayColors: false
                         }
                     },
                     scales: {
                         x: {
                             grid: { display: false },
-                            ticks: { color: '#94a3b8', font: { size: 11 } }
+                            ticks: { color: '#475569', font: { size: 11 } }
                         },
                         y: {
-                            grid: { color: '#334155', drawBorder: false },
-                            ticks: { color: '#94a3b8', font: { size: 11 }, stepSize: 1 },
+                            grid: { color: '#e2e8f0', drawBorder: false },
+                            ticks: { color: '#475569', font: { size: 11 }, stepSize: 2 },
                             beginAtZero: true
                         }
                     }
@@ -549,11 +543,18 @@
         // Load Disasters
         async function loadDisasters() {
             try {
-                const response = await fetch('/natural-disasters');
-                const data = await response.json();
+                // MOCKUP: Replace with actual API call
+                const data = {
+                    success: true,
+                    disasters: [
+                        { type: "Earthquake", region: "Himalayan Region", date: "2025-10-12" },
+                        { type: "Wildfire", region: "Western Ghats", date: "2025-10-10" },
+                        { type: "Flood", region: "Brahmaputra Basin", date: "2025-10-08" },
+                        { type: "Tsunami", region: "Andaman Islands", date: "2025-10-05" }
+                    ]
+                };
                 
                 const listEl = document.getElementById('disasterList');
-                
                 if (data.success && data.disasters.length > 0) {
                     listEl.innerHTML = data.disasters.map(d => `
                         <div class="event-item">
@@ -573,32 +574,21 @@
             } catch (error) {
                 console.error('Error loading disasters:', error);
                 document.getElementById('disasterList').innerHTML = 
-                    '<p class="text-red-400 text-center">Error loading data</p>';
+                    '<p class="text-red-500 text-center">Error loading data</p>';
             }
         }
 
-        // Get Disaster Emoji
         function getDisasterEmoji(type) {
-            const emojis = {
-                'Earthquake': '⚡',
-                'Tsunami': '🌊',
-                'Wildfire': '🔥',
-                'Flood': '💧'
-            };
+            const emojis = { 'Earthquake': '⚡', 'Tsunami': '🌊', 'Wildfire': '🔥', 'Flood': '💧' };
             return emojis[type] || '⚠️';
         }
 
-        // Refresh Functions
-        function refreshAnimalData() {
-            loadAnimalLocations();
-        }
+        function refreshAnimalData() { loadAnimalLocations(); }
+        function refreshBehaviourData() { loadBehaviourChart(); }
 
-        function refreshBehaviourData() {
-            loadBehaviourChart();
-        }
-
-        // Initialize on page load
         document.addEventListener('DOMContentLoaded', () => {
+            // NOTE: I've added mock data to the async functions so the dashboard populates without a backend.
+            // You can replace the mock data objects with your `fetch` calls.
             initializeMap();
             loadAnomalyChart();
             loadBehaviourChart();
