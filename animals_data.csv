@@ -1,52 +1,105 @@
-group_id,timestamp,animal_type,lat,lon,behaviour_description,anomaly_score
-sheep_flock_1,2025-09-13T02:32:25Z,Sheep Flock,12.924190330881451,77.30706697733237,Near village boundary,10
-deer_1,2025-09-13T03:32:25Z,Deer,12.89372437823088,77.27097321512171,Drinking from stream,38
-cow_herd_1,2025-09-13T04:32:25Z,Cow Herd,12.92278864716168,77.30332167055198,Grazing peacefully,16
-cow_herd_1,2025-09-14T12:32:25Z,Cow Herd,12.892843285171063,77.28185621767281,Moving to pasture,25
-sheep_flock_1,2025-09-15T05:32:25Z,Sheep Flock,12.926339742885617,77.31186474125516,Following shepherd,44
-cow_herd_1,2025-09-16T14:32:25Z,Cow Herd,12.923131684531196,77.30249086803784,Grazing peacefully,9
-dog_1,2025-09-16T23:32:25Z,Dog,12.899053783229053,77.31776731963386,Restless behavior,69
-dog_1,2025-09-17T03:32:25Z,Dog,12.905427743532327,77.30579272898473,Roaming near village,56
-dog_1,2025-09-17T04:32:25Z,Dog,12.897456550633787,77.29860655190338,Restless behavior,48
-sheep_flock_1,2025-09-17T09:32:25Z,Sheep Flock,12.916369217347865,77.32289811167402,Scattered formation,32
-sheep_flock_1,2025-09-18T08:32:25Z,Sheep Flock,12.911807252079766,77.30538287536213,Grazing on hillside,45
-dog_1,2025-09-19T09:32:25Z,Dog,12.896476447253834,77.30523307240117,Restless behavior,34
-dog_1,2025-09-19T14:32:25Z,Dog,12.909140474706279,77.30588372811135,Alert posture,65
-dog_1,2025-09-19T15:32:25Z,Dog,12.910034040525062,77.31174523533289,Roaming near village,44
-dog_1,2025-09-19T19:32:25Z,Dog,12.903183068301104,77.30890543106439,Restless behavior,83
-sheep_flock_1,2025-09-19T22:32:25Z,Sheep Flock,12.929273855880968,77.30153523565403,Grazing on hillside,31
-sheep_flock_1,2025-09-20T13:32:25Z,Sheep Flock,12.920163868297706,77.30861080870052,Near village boundary,23
-dog_1,2025-09-20T13:32:25Z,Dog,12.912789906842441,77.30429848799702,Alert posture,47
-cow_herd_1,2025-09-20T15:32:25Z,Cow Herd,12.926083548213184,77.31037520933857,Grazing peacefully,24
-cow_herd_1,2025-09-21T21:32:25Z,Cow Herd,12.902471958905325,77.319376173754,Grazing peacefully,26
-deer_1,2025-09-22T00:32:25Z,Deer,12.899494884391714,77.28278804730002,Spotted at forest edge,42
-dog_1,2025-09-22T07:32:25Z,Dog,12.90346649042434,77.31747665612126,Searching for food,52
-deer_1,2025-09-22T17:32:25Z,Deer,12.915523166150303,77.28907931415817,Alert and watchful,34
-dog_1,2025-09-23T21:32:25Z,Dog,12.900734035017207,77.2989349279478,Alert posture,31
-deer_1,2025-09-24T21:32:25Z,Deer,12.888256161451933,77.27775350925974,Moving towards hills,32
-elephant_herd_1,2025-09-25T02:32:25Z,Elephant Herd,12.93556122128995,77.27551505240103,Trumpet calls heard,53
-sheep_flock_1,2025-09-27T14:32:25Z,Sheep Flock,12.909224178213387,77.32072695768632,Huddled together,26
-deer_1,2025-09-28T03:32:25Z,Deer,12.89213845357503,77.28050907581432,Alert and watchful,33
-cow_herd_1,2025-09-28T23:32:25Z,Cow Herd,12.902519038274997,77.28168929880565,Grazing peacefully,12
-deer_1,2025-09-29T02:32:25Z,Deer,12.890576904588912,77.27184338227157,Spotted at forest edge,49
-deer_1,2025-09-30T02:32:25Z,Deer,12.90266771358299,77.27502656114878,Moving towards hills,20
-sheep_flock_1,2025-09-30T13:32:25Z,Sheep Flock,12.90714113563994,77.31554112165674,Grazing on hillside,49
-cow_herd_1,2025-09-30T14:32:25Z,Cow Herd,12.901845017518799,77.28357602237203,Grouped together,17
-cow_herd_1,2025-10-01T07:32:25Z,Cow Herd,12.895541153769322,77.29300604315014,Moving to pasture,16
-elephant_herd_1,2025-10-02T03:32:25Z,Elephant Herd,12.916954883949304,77.2853528474041,Near agricultural land,85
-cow_herd_1,2025-10-03T00:32:25Z,Cow Herd,12.890994916720473,77.30721165097297,Grazing peacefully,29
-cow_herd_1,2025-10-03T08:32:25Z,Cow Herd,12.918746925081473,77.31080112285073,Grazing peacefully,10
-sheep_flock_1,2025-10-04T06:32:25Z,Sheep Flock,12.930167631804045,77.30536726096052,Scattered formation,32
-sheep_flock_1,2025-10-04T12:32:25Z,Sheep Flock,12.929797366168362,77.32625558949299,Huddled together,13
-sheep_flock_1,2025-10-04T22:32:25Z,Sheep Flock,12.922752324034063,77.30220999801793,Grazing on hillside,26
-elephant_herd_1,2025-10-05T00:32:25Z,Elephant Herd,12.920213083203453,77.27737931016661,Trumpet calls heard,85
-cow_herd_1,2025-10-05T12:32:25Z,Cow Herd,12.894812997344218,77.29627826368484,Resting under trees,24
-sheep_flock_1,2025-10-05T14:32:25Z,Sheep Flock,12.917586231538522,77.32218942020809,Huddled together,50
-elephant_herd_1,2025-10-06T00:32:25Z,Elephant Herd,12.931331496677508,77.28023450865192,Near agricultural land,47
-cow_herd_1,2025-10-06T16:32:25Z,Cow Herd,12.903324109652926,77.29872748320791,Moving to pasture,26
-elephant_herd_1,2025-10-06T23:32:25Z,Elephant Herd,12.925545460193673,77.27197288709964,Near agricultural land,45
-elephant_herd_1,2025-10-07T21:32:25Z,Elephant Herd,12.923553129992872,77.29018386302901,Trumpet calls heard,67
-cow_herd_1,2025-10-08T00:32:25Z,Cow Herd,12.895266770909469,77.28921860586934,Grouped together,8
-cow_herd_1,2025-10-09T00:32:25Z,Cow Herd,12.920572380796232,77.30979623059092,Grouped together,25
-cow_herd_1,2025-10-09T08:32:25Z,Cow Herd,12.90717672445438,77.30554236205796,Resting under trees,22
-deer_1,2025-10-11T16:32:25Z,Deer,12.884115143926136,77.2942645823765,Rapid movement detected,44
+group_id,lat,lon,timestamp,animal_type,behaviour_description,anomaly_score
+farm_cow_1,44.680,-122.590,2025-10-01T06:00:00Z,Cow,Grazing,10
+farm_sheep_1,44.681,-122.591,2025-10-01T06:00:00Z,Sheep,Foraging,8
+deer_herd_1,37.331,-119.232,2025-10-01T06:00:00Z,Deer,Browsing,15
+arctic_fox_1,69.590,-145.000,2025-10-01T06:00:00Z,Arctic Fox,Resting,12
+farm_cow_1,44.681,-122.591,2025-10-01T12:00:00Z,Cow,Resting,5
+farm_sheep_1,44.680,-122.592,2025-10-01T12:00:00Z,Sheep,Grazing,7
+deer_herd_1,37.330,-119.230,2025-10-01T12:00:00Z,Deer,Resting,10
+arctic_fox_1,69.591,-145.001,2025-10-01T12:00:00Z,Arctic Fox,Hunting,20
+farm_cow_1,44.680,-122.592,2025-10-02T06:00:00Z,Cow,Grazing,11
+farm_sheep_1,44.681,-122.590,2025-10-02T06:00:00Z,Sheep,Foraging,9
+deer_herd_1,37.332,-119.233,2025-10-02T06:00:00Z,Deer,Browsing,16
+arctic_fox_1,69.590,-145.002,2025-10-02T06:00:00Z,Arctic Fox,Resting,13
+farm_cow_1,44.681,-122.591,2025-10-02T12:00:00Z,Cow,Resting,6
+farm_sheep_1,44.680,-122.592,2025-10-02T12:00:00Z,Sheep,Grazing,8
+deer_herd_1,37.331,-119.231,2025-10-02T12:00:00Z,Deer,Resting,11
+arctic_fox_1,69.592,-145.000,2025-10-02T12:00:00Z,Arctic Fox,Hunting,21
+farm_cow_1,44.680,-122.590,2025-10-03T06:00:00Z,Cow,Grazing,10
+farm_sheep_1,44.681,-122.591,2025-10-03T06:00:00Z,Sheep,Foraging,8
+deer_herd_1,37.333,-119.234,2025-10-03T06:00:00Z,Deer,Browsing,15
+arctic_fox_1,69.590,-145.001,2025-10-03T06:00:00Z,Arctic Fox,Resting,12
+farm_cow_1,44.681,-122.591,2025-10-03T12:00:00Z,Cow,Resting,5
+farm_sheep_1,44.680,-122.592,2025-10-03T12:00:00Z,Sheep,Grazing,7
+deer_herd_1,37.332,-119.232,2025-10-03T12:00:00Z,Deer,Resting,10
+arctic_fox_1,69.591,-145.002,2025-10-03T12:00:00Z,Arctic Fox,Hunting,20
+farm_cow_1,44.680,-122.591,2025-10-04T06:00:00Z,Cow,Grazing,12
+farm_sheep_1,44.681,-122.590,2025-10-04T06:00:00Z,Sheep,Foraging,9
+deer_herd_1,37.330,-119.230,2025-10-04T06:00:00Z,Deer,Browsing,16
+arctic_fox_1,69.590,-145.003,2025-10-04T06:00:00Z,Arctic Fox,Resting,13
+farm_cow_1,44.681,-122.592,2025-10-04T12:00:00Z,Cow,Resting,6
+farm_sheep_1,44.680,-122.591,2025-10-04T12:00:00Z,Sheep,Grazing,8
+deer_herd_1,37.331,-119.231,2025-10-04T12:00:00Z,Deer,Resting,11
+arctic_fox_1,69.592,-145.001,2025-10-04T12:00:00Z,Arctic Fox,Hunting,21
+farm_cow_1,44.680,-122.590,2025-10-05T06:00:00Z,Cow,Grazing,10
+farm_sheep_1,44.681,-122.591,2025-10-05T06:00:00Z,Sheep,Foraging,8
+deer_herd_1,37.331,-119.232,2025-10-05T06:00:00Z,Deer,Browsing,15
+arctic_fox_1,69.590,-145.000,2025-10-05T06:00:00Z,Arctic Fox,Resting,12
+farm_cow_1,44.681,-122.591,2025-10-05T12:00:00Z,Cow,Resting,5
+farm_sheep_1,44.680,-122.592,2025-10-05T12:00:00Z,Sheep,Grazing,7
+deer_herd_1,37.330,-119.230,2025-10-05T12:00:00Z,Deer,Resting,10
+arctic_fox_1,69.591,-145.001,2025-10-05T12:00:00Z,Arctic Fox,Hunting,20
+farm_cow_1,44.680,-122.592,2025-10-06T06:00:00Z,Cow,Grazing,11
+farm_sheep_1,44.681,-122.590,2025-10-06T06:00:00Z,Sheep,Foraging,9
+deer_herd_1,37.332,-119.233,2025-10-06T06:00:00Z,Deer,Browsing,16
+arctic_fox_1,69.590,-145.002,2025-10-06T06:00:00Z,Arctic Fox,Resting,13
+farm_cow_1,44.681,-122.591,2025-10-06T12:00:00Z,Cow,Resting,6
+farm_sheep_1,44.680,-122.592,2025-10-06T12:00:00Z,Sheep,Grazing,8
+deer_herd_1,37.331,-119.231,2025-10-06T12:00:00Z,Deer,Resting,11
+arctic_fox_1,69.592,-145.000,2025-10-06T12:00:00Z,Arctic Fox,Hunting,21
+farm_cow_1,44.680,-122.590,2025-10-07T06:00:00Z,Cow,Grazing,10
+farm_sheep_1,44.681,-122.591,2025-10-07T06:00:00Z,Sheep,Foraging,8
+deer_herd_1,37.333,-119.234,2025-10-07T06:00:00Z,Deer,Browsing,15
+arctic_fox_1,69.590,-145.001,2025-10-07T06:00:00Z,Arctic Fox,Resting,12
+farm_cow_1,44.681,-122.591,2025-10-07T12:00:00Z,Cow,Resting,5
+farm_sheep_1,44.680,-122.592,2025-10-07T12:00:00Z,Sheep,Grazing,7
+deer_herd_1,37.332,-119.232,2025-10-07T12:00:00Z,Deer,Resting,10
+arctic_fox_1,69.591,-145.002,2025-10-07T12:00:00Z,Arctic Fox,Hunting,20
+farm_cow_1,44.680,-122.591,2025-10-08T06:00:00Z,Cow,Grazing,12
+farm_sheep_1,44.681,-122.590,2025-10-08T06:00:00Z,Sheep,Foraging,9
+deer_herd_1,37.330,-119.230,2025-10-08T06:00:00Z,Deer,Browsing,16
+arctic_fox_1,69.590,-145.003,2025-10-08T06:00:00Z,Arctic Fox,Resting,13
+farm_cow_1,44.681,-122.592,2025-10-08T12:00:00Z,Cow,Resting,6
+farm_sheep_1,44.680,-122.591,2025-10-08T12:00:00Z,Sheep,Grazing,8
+deer_herd_1,37.331,-119.231,2025-10-08T12:00:00Z,Deer,Resting,11
+arctic_fox_1,69.592,-145.001,2025-10-08T12:00:00Z,Arctic Fox,Hunting,21
+farm_cow_1,44.680,-122.590,2025-10-09T06:00:00Z,Cow,Grazing,10
+farm_sheep_1,44.681,-122.591,2025-10-09T06:00:00Z,Sheep,Foraging,8
+deer_herd_1,37.335,-119.235,2025-10-09T06:00:00Z,Deer,Agitated,72
+arctic_fox_1,69.590,-145.000,2025-10-09T06:00:00Z,Arctic Fox,Resting,12
+farm_cow_1,44.681,-122.591,2025-10-09T12:00:00Z,Cow,Resting,5
+farm_sheep_1,44.680,-122.592,2025-10-09T12:00:00Z,Sheep,Grazing,7
+deer_herd_1,37.337,-119.238,2025-10-09T12:00:00Z,Deer,Moving to shelter,85
+arctic_fox_1,69.591,-145.001,2025-10-09T12:00:00Z,Arctic Fox,Hunting,20
+farm_cow_1,44.680,-122.592,2025-10-10T06:00:00Z,Cow,Grazing,11
+farm_sheep_1,44.681,-122.590,2025-10-10T06:00:00Z,Sheep,Foraging,9
+deer_herd_1,37.334,-119.233,2025-10-10T06:00:00Z,Deer,Hiding,78
+arctic_fox_1,69.590,-145.002,2025-10-10T06:00:00Z,Arctic Fox,Resting,13
+farm_cow_1,44.681,-122.591,2025-10-10T12:00:00Z,Cow,Resting,6
+farm_sheep_1,44.680,-122.592,2025-10-10T12:00:00Z,Sheep,Grazing,8
+deer_herd_1,37.332,-119.231,2025-11-10T12:00:00Z,Deer,Calming down,40
+arctic_fox_1,69.592,-145.000,2025-10-10T12:00:00Z,Arctic Fox,Hunting,21
+farm_cow_1,44.680,-122.590,2025-10-11T06:00:00Z,Cow,Grazing,10
+farm_sheep_1,44.681,-122.591,2025-10-11T06:00:00Z,Sheep,Foraging,8
+deer_herd_1,37.333,-119.234,2025-10-11T06:00:00Z,Deer,Browsing,15
+arctic_fox_1,69.590,-145.001,2025-10-11T06:00:00Z,Arctic Fox,Resting,12
+farm_cow_1,44.681,-122.591,2025-10-11T12:00:00Z,Cow,Resting,5
+farm_sheep_1,44.680,-122.592,2025-10-11T12:00:00Z,Sheep,Grazing,7
+deer_herd_1,37.332,-119.232,2025-10-11T12:00:00Z,Deer,Resting,10
+arctic_fox_1,69.591,-145.002,2025-10-11T12:00:00Z,Arctic Fox,Hunting,20
+farm_cow_1,44.682,-122.593,2025-10-12T06:00:00Z,Cow,Restless,80
+farm_sheep_1,44.683,-122.594,2025-10-12T06:00:00Z,Sheep,Grouping,85
+deer_herd_1,37.331,-119.231,2025-10-12T06:00:00Z,Deer,Agitated,55
+arctic_fox_1,69.593,-145.004,2025-10-12T06:00:00Z,Arctic Fox,Agitated,90
+farm_cow_1,44.683,-122.594,2025-10-12T12:00:00Z,Cow,Refusing to enter barn,92
+farm_sheep_1,44.684,-122.595,2025-10-12T12:00:00Z,Sheep,Anxious bleating,95
+deer_herd_1,37.330,-119.230,2025-10-12T12:00:00Z,Deer,Erratic movement,68
+arctic_fox_1,69.595,-145.006,2025-10-12T12:00:00Z,Arctic Fox,Frantic movement,98
+farm_cow_1,44.684,-122.595,2025-10-13T06:00:00Z,Cow,Panic,96
+farm_sheep_1,44.685,-122.596,2025-10-13T06:00:00Z,Sheep,Stampede,99
+deer_herd_1,37.335,-119.235,2025-10-13T06:00:00Z,Deer,Fleeing,75
+arctic_fox_1,69.597,-145.008,2025-10-13T06:00:00Z,Arctic Fox,Hiding,99
+farm_cow_1,44.682,-122.593,2025-10-13T12:00:00Z,Cow,Calming down,35
+farm_sheep_1,44.683,-122.594,2025-1G:00:00Z,Sheep,Scattered,40
+deer_herd_1,37.332,-119.232,2025-10-13T12:00:00Z,Deer,Returning to area,30
+arctic_fox_1,69.592,-145.003,2025-10-13T12:00:00Z,Arctic Fox,Cautious,50
