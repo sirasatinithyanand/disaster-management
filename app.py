@@ -192,4 +192,4 @@ def get_natural_disasters():
 # --- Run the App ---
 if __name__ == "__main__":
     load_replay_data()  # Load the data *before* starting the app
-    app.run(debug=True, port=5002)
+    app.run(debug=True, port=5004)

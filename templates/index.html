@@ -265,7 +265,11 @@
          * Initialize the Leaflet Map
          */
         function initializeMap() {
-            map = L.map('map').setView([44.56, -123.26], 10); // Center on Oregon (Farm)
+            // --- THIS IS THE CRITICAL CHANGE ---
+            // We are now centered on North America to see Alaska, Oregon, and California
+            map = L.map('map').setView([50, -125], 3); 
+            // --- END OF CRITICAL CHANGE ---
+            
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
@@ -477,7 +481,7 @@
         
         // Helper function for disaster emoji
         function getDisasterEmoji(type) {
-            const emojis = { 'Earthquake': '⚡', 'Tsunami': '🌊', 'Wildfire': '🔥', 'Flood': '💧', 'Landslide': '⛰️' };
+            const emojis = { 'Earthquake': '⚡', 'Tsunami': '🌊', 'Wildfire': '🔥', 'Flood': '💧', 'Landslide': '⛰️', 'Severe Storm': '💨' };
             // Use icon from CSV if available, otherwise default
             return emojis[type] || '⚠️'; 
         }
