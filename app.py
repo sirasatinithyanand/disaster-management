@@ -3,6 +3,7 @@ from flask import Flask, jsonify, render_template
 from datetime import datetime, timedelta
 import pytz
 import json
+import os  # <-- Import the OS module
 
 app = Flask(__name__)
 
@@ -26,11 +27,23 @@ def load_replay_data():
     and prepares it for the replay simulation.
     """
     global REPLAY_DATA, REPLAY_MAX_STEPS
+    
+    # --- NEW LOGS ---
+    print("="*50)
+    print(f"--- [LOG] CURRENT WORKING DIRECTORY: {os.getcwd()}")
+    print("--- [LOG] Server is looking for files in this folder.")
+    print("="*50)
+    # --- END LOGS ---
+
     print("🧠 Loading simulation data from animals_data.csv for demo...")
+    animal_file_path = os.path.abspath("animals_data.csv")
+    print(f"--- [LOG] Trying to read: {animal_file_path} ---")
+
     try:
-        # Use the *new* 32-point CSV file
+        # This will now load your 120-entry CSV
         df = pd.read_csv("animals_data.csv")
-        df['timestamp'] = pd.to_datetime(df['timestamp'])
+        # CRITICAL FIX for the error you had before
+        df['timestamp'] = pd.to_datetime(df['timestamp'], format='mixed')
         # Sort by timestamp to make the replay chronological
         df = df.sort_values(by='timestamp')
 
@@ -47,16 +60,17 @@ def load_replay_data():
                     "anomaly_score": int(row['anomaly_score'])
                 })
             REPLAY_DATA[group_id] = path_data
-            print(f"   ...Loaded {len(path_data)} points for {group_id}")
+            # print(f"   ...Loaded {len(path_data)} points for {group_id}") # Commented out for cleaner logs
         
         # Find the length of the *shortest* path to use as our max step
         if REPLAY_DATA:
-            # All paths have 8 steps in the new data
+            # All paths have 30 steps in the new data
             REPLAY_MAX_STEPS = min(len(path) for path in REPLAY_DATA.values())
             print(f"✅ Simulation ready. Max steps: {REPLAY_MAX_STEPS}")
         
     except Exception as e:
-        print(f"❌ CRITICAL ERROR: Could not load animals_data.csv: {str(e)}")
+        print(f"--- [LOG] ❌ FAILED to read animals_data.csv ---")
+        print(f"--- [LOG] Error details: {str(e)} ---")
 
 
 # ===================================================================
@@ -66,6 +80,7 @@ def load_replay_data():
 # --- Main Page Route ---
 @app.route("/")
 def index():
+    print("--- [LOG] Received request for / (index.html) ---")
     # This just shows your webpage
     return render_template('index.html')
 
@@ -119,7 +134,7 @@ def get_anomaly_chart_data():
     # This route is unchanged and reads from the CSV
     try:
         df = pd.read_csv("animals_data.csv")
-        df['timestamp'] = pd.to_datetime(df['timestamp'])
+        df['timestamp'] = pd.to_datetime(df['timestamp'], format='mixed')
         df = df.sort_values(by='timestamp')
         
         # Use a wide date range to ensure our new demo data is included
@@ -148,7 +163,7 @@ def get_behaviour_chart_data():
     # This route is unchanged and reads from the CSV
     try:
         df = pd.read_csv("animals_data.csv")
-        df['timestamp'] = pd.to_datetime(df['timestamp'])
+        df['timestamp'] = pd.to_datetime(df['timestamp'], format='mixed')
         
         # Use a wide date range
         seven_days_ago = datetime.now(pytz.utc) - timedelta(days=90)
@@ -173,7 +188,13 @@ def get_behaviour_chart_data():
 
 @app.route("/natural-disasters")
 def get_natural_disasters():
-    # This route is unchanged and reads from disasters.csv
+    
+    # --- NEW LOGS ---
+    print("\n--- [LOG] Received request for /natural-disasters ---")
+    disaster_file_path = os.path.abspath("disasters.csv")
+    print(f"--- [LOG] Trying to read: {disaster_file_path} ---")
+    # --- END LOGS ---
+    
     try:
         df = pd.read_csv("disasters.csv")
         disasters = []
@@ -184,12 +205,20 @@ def get_natural_disasters():
                 "date": row['date'], # Use the date string from the new CSV
                 "icon": row['icon']
             })
+        
+        # --- NEW LOGS ---
+        print(f"--- [LOG] Success! Found {len(disasters)} disasters. ---")
+        # --- END LOGS ---
         return jsonify({"success": True, "disasters": disasters})
+    
     except Exception as e:
-        print(f"Error in natural-disasters: {str(e)}")
+        # --- NEW LOGS ---
+        print(f"--- [LOG] ❌ FAILED to read disasters.csv ---")
+        print(f"--- [LOG] Error details: {str(e)} ---")
+        # --- END LOGS ---
         return jsonify({"success": False, "disasters": []})
 
 # --- Run the App ---
 if __name__ == "__main__":
     load_replay_data()  # Load the data *before* starting the app
-    app.run(debug=True, port=5004)
+    app.run(debug=True, port=5006)

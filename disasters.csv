@@ -1,5 +1,5 @@
 disaster_type,region,date,icon
 Severe Storm,Sierra National Forest,2025-10-09T12:00:00Z,wind
-Earthquake,Scio, Oregon Farm,2025-10-13T06:00:00Z,earthquake
+Earthquake,"Scio, Oregon Farm",2025-10-13T06:00:00Z,earthquake
 Earthquake,Arctic National Refuge,2025-10-13T06:00:00Z,earthquake
 Wildfire,California,2025-09-01T00:00:00Z,fire
